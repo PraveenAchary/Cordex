@@ -76,7 +76,7 @@ pyarrow==23.0.1
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.23
-pydantic==2.11.9
+pydantic==2.11.6
 pydantic_core==2.33.4
 pydeck==0.9.1
 PyJWT==2.10.1
