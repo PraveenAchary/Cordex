@@ -1,0 +1,28 @@
+8 -x, !x (Unary)
+7 *, /, % (Multiplicative)
+6 +, - (Additive)
+5 <, >, <=, >= (Relational)
+4 ==, != (Equality)
+3 and (Logical AND)
+2 or (Logical OR)
+1 = (Assignment)
+
+
+
+
+
+
+
+let a = 1
+let b = 20
+for (i in items) {
+    let a = 5
+    while (a > 0) {
+        let c = a + b
+        break
+        let d = unknown
+    }
+    continue
+}
+break
+print(c)
