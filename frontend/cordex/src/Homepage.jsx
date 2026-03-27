@@ -277,6 +277,9 @@ const DEFAULT_CODE =
 print("Welcome to Cordex!");
 `;
 
+// ── Point to Render backend via Vercel env variable ──
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 function RunIcon() {
   return (
     <svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor">
@@ -303,7 +306,7 @@ function SpinnerBlue() {
 
 export default function Homepage() {
   const [code, setCode] = useState(DEFAULT_CODE);
-  const [output, setOutput] = useState(null); // null = empty state
+  const [output, setOutput] = useState(null);
   const [roastMode, setRoastMode] = useState(false);
   const [running, setRunning] = useState(false);
   const [validating, setValidating] = useState(false);
@@ -314,7 +317,6 @@ export default function Homepage() {
   const lineNumsRef = useRef(null);
   const outputBodyRef = useRef(null);
 
-  // Inject styles once
   useEffect(() => {
     const id = "cordex-styles";
     if (!document.getElementById(id)) {
@@ -325,7 +327,6 @@ export default function Homepage() {
     }
   }, []);
 
-  // Sync line numbers with scroll
   const syncScroll = useCallback(() => {
     if (!editorRef.current || !lineNumsRef.current) return;
     lineNumsRef.current.style.top = 16 - editorRef.current.scrollTop + "px";
@@ -377,15 +378,13 @@ export default function Homepage() {
     setOutput([{ text: "$ cordex validate main.cdx", cls: "muted" }]);
 
     try {
-      const res = await fetch("/Cordex/Interpreter/api/validate/", {
+      const res = await fetch(`${API_BASE}/Cordex/Interpreter/api/validate/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ source: trimmed }),
       });
 
       const data = await res.json();
-      console.log("Cordex validate response:", data);
-
       const lines = [{ text: "$ cordex validate main.cdx", cls: "muted" }];
 
       if (data.value) {
@@ -412,7 +411,7 @@ export default function Homepage() {
       setOutput([
         { text: "$ cordex validate main.cdx", cls: "muted" },
         { text: "✖ Could not reach Cordex backend", cls: "error" },
-        { text: "  Make sure Django is running on /Cordex/Interpreter/api/", cls: "muted" },
+        { text: `  Tried: ${API_BASE}/Cordex/Interpreter/api/validate/`, cls: "muted" },
       ]);
       setStatus({ type: "error", text: "connection failed" });
     } finally {
@@ -429,19 +428,15 @@ export default function Homepage() {
     setOutput([{ text: "$ cordex run main.cdx", cls: "muted" }]);
 
     try {
-      const res = await fetch("/Cordex/Interpreter/api/compile/", {
+      const res = await fetch(`${API_BASE}/Cordex/Interpreter/api/compile/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ source: trimmed, roast_mode: roastMode }),
       });
 
       const data = await res.json();
-      console.log("Cordex response:", data);
-      console.log("output[0]:", data.output[0]);
-      console.log("typeof output[0]:", typeof data.output[0]);
       const lines = [{ text: "$ cordex run main.cdx", cls: "muted" }];
 
-      // Works whether output is a string OR a list
       if (data.output) {
         const outputStr = Array.isArray(data.output)
           ? data.output.join("\n")
@@ -471,7 +466,7 @@ export default function Homepage() {
       setOutput([
         { text: "$ cordex run main.cdx", cls: "muted" },
         { text: "✖ Could not reach Cordex backend", cls: "error" },
-        { text: "  Make sure Django is running on /Cordex/Interpreter/api/", cls: "muted" },
+        { text: `  Tried: ${API_BASE}/Cordex/Interpreter/api/compile/`, cls: "muted" },
       ]);
       setStatus({ type: "error", text: "connection failed" });
     } finally {
@@ -479,7 +474,6 @@ export default function Homepage() {
     }
   }
 
-  // Auto-scroll output
   useEffect(() => {
     if (outputBodyRef.current) {
       outputBodyRef.current.scrollTop = outputBodyRef.current.scrollHeight;
@@ -513,7 +507,6 @@ export default function Homepage() {
             </div>
           </div>
 
-          {/* Validate Button */}
           <button
             className="cx-validate-btn"
             onClick={handleValidate}
@@ -523,7 +516,6 @@ export default function Homepage() {
             {validating ? "Validating" : "Validate"}
           </button>
 
-          {/* Run Button */}
           <button className="cx-run-btn" onClick={handleRun} disabled={running || validating}>
             {running ? <Spinner /> : <RunIcon />}
             {running ? "Running" : "Run"}
@@ -540,8 +532,7 @@ export default function Homepage() {
             <span className="cx-file-tab">main.cdx</span>
           </div>
           <div className="cx-editor-wrap">
-            <div className="cx-line-nums" ref={lineNumsRef}
-              style={{ whiteSpace: "pre" }}>
+            <div className="cx-line-nums" ref={lineNumsRef} style={{ whiteSpace: "pre" }}>
               {lineNumbers}
             </div>
             <textarea
