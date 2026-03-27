@@ -639,7 +639,7 @@ export default function CordexDocs() {
 <span class="c-keyword">let</span> i <span class="c-op">=</span> <span class="c-number">0</span>
 <span class="c-keyword">while</span>(i <span class="c-op">&lt;</span> <span class="c-number">5)</span> {
     <span class="c-keyword">print</span>(i)
-    i <span class="c-op">=</span> i <span class="c-op">+</span> <span class="c-number">1</span>
+    i <span class="c-op">=</span> i++;
 }
 
 <span class="c-comment"># For loop</span>
