@@ -64,7 +64,7 @@ DESI_ALIAS = {
     'rakho'     : 'let',
     'agar'      : 'if',
     'warna'     : 'else',
-    'ya_phir'   : 'else',      # parser handles else+if combo
+    'ya_phir'   : 'elif',      # parser handles else+if combo
     'jab_tak'   : 'while',
     'baar_baar' : 'for',
     'bas'       : 'break',
