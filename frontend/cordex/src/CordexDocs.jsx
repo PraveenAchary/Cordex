@@ -291,7 +291,7 @@ const SECTIONS = [
   { id: "install",  label: "Quick Start",       emoji: "⚡", group: "Getting Started" },
   { id: "types",    label: "Data Types",        emoji: "🧬", group: "Language" },
   { id: "keywords", label: "Keywords",          emoji: "🔑", group: "Language" },
-  { id: "desi",     label: "Desi Keywords",     emoji: "🇮🇳", group: "Language" },
+  { id: "desi",     label: "Hindi Keywords",     emoji: "🇮🇳", group: "Language" },
   { id: "cardio",   label: "Cardio Keywords",   emoji: "❤️", group: "Language" },
   { id: "syntax",   label: "Syntax & Examples", emoji: "📝", group: "Language" },
   { id: "roast",    label: "Roast Mode",        emoji: "🔥", group: "Features" },
@@ -399,7 +399,7 @@ export default function CordexDocs() {
                     <span className="chip chip-green">Dynamically Typed</span>
                     <span className="chip chip-purple">Curly Brace Syntax</span>
                     <span className="chip chip-red">🔥 Roast Mode</span>
-                    <span className="chip chip-yellow">🇮🇳 Desi Keywords</span>
+                    <span className="chip chip-yellow">With Hindi Keywords</span>
                     <span className="chip chip-red">❤️ Cardio Keywords</span>
                   </div>
                 </div>
@@ -544,9 +544,9 @@ export default function CordexDocs() {
               <CodeBlock lang="cordex — desi style">
 {`<span class="c-desi">rakho</span> score <span class="c-op">=</span> <span class="c-number">95</span>
 
-<span class="c-desi">agar</span> score <span class="c-op">&gt;</span> <span class="c-number">90</span> {
+<span class="c-desi">agar</span> (score<span class="c-op">&gt;</span> <span class="c-number">90)</span> {
     <span class="c-desi">bol</span>(<span class="c-string">"Ekdum fatafat! 🔥"</span>)
-} <span class="c-desi">ya_phir</span> score <span class="c-op">&gt;</span> <span class="c-number">75</span> {
+} <span class="c-desi">ya_phir</span> (score <span class="c-op">&gt;</span> <span class="c-number">75)</span> {
     <span class="c-desi">bol</span>(<span class="c-string">"Theek hai yaar"</span>)
 } <span class="c-desi">warna</span> {
     <span class="c-desi">bol</span>(<span class="c-string">"Padhai kar bhai 😂"</span>)
@@ -592,23 +592,20 @@ export default function CordexDocs() {
 {`<span class="c-keyword">let</span> i <span class="c-op">=</span> <span class="c-number">0</span>
 
 <span class="c-comment"># beating = while,  monitor = print</span>
-<span class="c-cardio">beating</span> i <span class="c-op">&lt;</span> <span class="c-number">5</span> {
+<span class="c-cardio">beating</span>(i <span class="c-op">&lt;</span> <span class="c-number">5)</span> {
     <span class="c-cardio">monitor</span>(i)
     i <span class="c-op">=</span> i <span class="c-op">+</span> <span class="c-number">1</span>
 }
 
 <span class="c-comment"># diagnose = if,  rediagnose = else</span>
 <span class="c-keyword">let</span> bp <span class="c-op">=</span> <span class="c-number">120</span>
-<span class="c-cardio">diagnose</span> bp <span class="c-op">&gt;</span> <span class="c-number">140</span> {
+<span class="c-cardio">diagnose</span> (bp <span class="c-op">&gt;</span> <span class="c-number">140)</span> {
     <span class="c-cardio">monitor</span>(<span class="c-string">"High BP! ⚠️"</span>)
 } <span class="c-cardio">rediagnose</span> {
     <span class="c-cardio">monitor</span>(<span class="c-string">"All clear ✅"</span>)
 }
 
-<span class="c-comment"># scan = for</span>
-<span class="c-cardio">scan</span> x <span class="c-keyword">in</span> [<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>] {
-    <span class="c-cardio">monitor</span>(x)
-}`}
+`}
               </CodeBlock>
             </section>
 
@@ -629,7 +626,7 @@ export default function CordexDocs() {
               <div className="section-desc">If / Else</div>
               <CodeBlock>
 {`<span class="c-keyword">let</span> x <span class="c-op">=</span> <span class="c-number">10</span>
-<span class="c-keyword">if</span> x <span class="c-op">&gt;</span> <span class="c-number">5</span> {
+<span class="c-keyword">if</span> (x <span class="c-op">&gt;</span> <span class="c-number">5)</span> {
     <span class="c-keyword">print</span>(<span class="c-string">"Big number!"</span>)
 } <span class="c-keyword">else</span> {
     <span class="c-keyword">print</span>(<span class="c-string">"Small number"</span>)
@@ -640,13 +637,14 @@ export default function CordexDocs() {
               <CodeBlock>
 {`<span class="c-comment"># While loop</span>
 <span class="c-keyword">let</span> i <span class="c-op">=</span> <span class="c-number">0</span>
-<span class="c-keyword">while</span> i <span class="c-op">&lt;</span> <span class="c-number">5</span> {
+<span class="c-keyword">while</span>(i <span class="c-op">&lt;</span> <span class="c-number">5)</span> {
     <span class="c-keyword">print</span>(i)
     i <span class="c-op">=</span> i <span class="c-op">+</span> <span class="c-number">1</span>
 }
 
 <span class="c-comment"># For loop</span>
-<span class="c-keyword">for</span> x <span class="c-keyword">in</span> [<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>] {
+<span class="c-keyword">let</span>arr<span class="c-op">=</span>[1,2,3,4]
+<span class="c-keyword">for</span>(x <span class="c-keyword">in</span>arr) {
     <span class="c-keyword">print</span>(x)
 }`}
               </CodeBlock>
