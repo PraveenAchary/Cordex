@@ -247,7 +247,7 @@ def parse_statement():
         if op=='PLUSPLUS':
             advance();
             return {
-                'type':'LetStatement",
+                'type':"LetStatement",
                 "name":name,
                 "value":{"type":"BinaryExpr","left":name,'op':'+',"right":1}
             }
