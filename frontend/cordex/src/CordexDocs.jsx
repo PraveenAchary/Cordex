@@ -643,8 +643,8 @@ export default function CordexDocs() {
 }
 
 <span class="c-comment"># For loop</span>
-<span class="c-keyword">let </span> arr<span class="c-op">=</span>[1,2,3,4]
-<span class="c-keyword">for</span>(x <span class="c-keyword">in </span> arr) {
+<span class="c-keyword">let</span> nums = [<span class="c-number">1</span>, <span class="c-number">2</span>, <span class="c-number">3</span>]
+<span class="c-keyword">for</span>(x <span class="c-keyword">in</span> nums) {
     <span class="c-keyword">print</span>(x)
 }`}
               </CodeBlock>
