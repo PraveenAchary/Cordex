@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-
+import {useNavigate} from "react-router-dom";
 const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600&display=swap');
 
@@ -312,7 +312,7 @@ export default function Homepage() {
   const [validating, setValidating] = useState(false);
   const [status, setStatus] = useState({ type: "idle", text: "ready" });
   const [cursor, setCursor] = useState({ ln: 1, col: 1 });
-
+  const navigate = useNavigate();
   const editorRef = useRef(null);
   const lineNumsRef = useRef(null);
   const outputBodyRef = useRef(null);
@@ -506,7 +506,13 @@ export default function Homepage() {
               <div className="cx-toggle-knob" />
             </div>
           </div>
-
+          <button
+            className="cx-validation-btn"
+            onclick={()=>{navigate("/docs")}
+            style = {{borderColor:"#6c63ff",color:"#a29bfe"}}
+            >
+            📘 Docs
+          </button>
           <button
             className="cx-validate-btn"
             onClick={handleValidate}
