@@ -240,6 +240,24 @@ def parse_statement():
         advance()
         return {'type': 'ContinueStatement'}
 
+    elif token['type'] == 'IDENT':
+        name = token['value']
+        op = current()['type'] if current() else None
+
+        if op=='PLUSPLUS':
+            advance();
+            return {
+                'type':'LetStatement",
+                "name":name,
+                "value":{"type":"BinaryExpr","left":name,'op':'+',"right":1}
+            }
+        elif op=='MINUSMINUS":
+            advance()
+            return {
+                "type":"LetStatement",
+                "name":name,
+                "value":{"type":"BinaryExpr","left":name,"op":'-',"right":1}
+            }
     else:
         val = token.get('value', token.get('type', '?'))
         raise Exception(f"Unexpected token '{val}' at line {token.get('line', '?')}")
