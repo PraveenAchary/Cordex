@@ -25,7 +25,7 @@ def run_with_timeout(code, roast_mode=False, timeout=30):
     )
 
     process.start()
-    process.join(timeout)  # wait max 15 seconds
+    process.join(timeout)  # wait max 30 seconds
 
     if process.is_alive():
         process.kill()
