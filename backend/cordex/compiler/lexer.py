@@ -30,11 +30,11 @@ TT_EOF       = 'EOF'
 # ── Keywords ─────────────────────────────────────────────
 KEYWORDS = {
     # ── Standard Keywords ─────────────────────────────────
-    'let', 'func',
+    'let',
     'if', 'else', 'while', 'for', 'in',
     'print',
     'true', 'false', 'null',
-    'break', 'continue', 'return',
+    'break', 'continue',
 
     # ── Cardiology-Themed Keywords ────────────────────────
     'diagnose', 'rediagnose', 'bypass', 'pulse',
@@ -42,7 +42,6 @@ KEYWORDS = {
 
     # ── Desi-Indian Style Keywords ────────────────────────
     'rakho',        # "keep/store"      → let
-    'kaam',         # "work/function"   → func
     'agar',         # "if"              → if
     'warna',        # "otherwise"       → else
     'ya_phir',      # "or else if"      → else if
@@ -50,7 +49,6 @@ KEYWORDS = {
     'baar_baar',    # "again and again" → for
     'bas',          # "enough/stop"     → break
     'aage_badh',    # "move forward"    → continue
-    'wapas',        # "return/back"     → return
     'bol',          # "say/speak"       → print
     'sunao',        # "tell me"         → print
     'sach',         # "truth"           → true
@@ -64,7 +62,6 @@ KEYWORDS = {
 DESI_ALIAS = {
     # ── Desi-Indian Style ─────────────────────────────────
     'rakho'     : 'let',
-    'kaam'      : 'func',
     'agar'      : 'if',
     'warna'     : 'else',
     'ya_phir'   : 'else',      # parser handles else+if combo
@@ -72,7 +69,6 @@ DESI_ALIAS = {
     'baar_baar' : 'for',
     'bas'       : 'break',
     'aage_badh' : 'continue',
-    'wapas'     : 'return',
     'bol'       : 'print',
     'sunao'     : 'print',
     'sach'      : 'true',
