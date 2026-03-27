@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
@@ -320,6 +320,7 @@ function SectionTag({ children }) {
 }
 
 export default function CordexDocs() {
+  const navigate = useNavigate();
   const [theme, setTheme] = useState("dark");
   const [active, setActive] = useState("intro");
   const sectionRefs = useRef({});
@@ -370,6 +371,9 @@ export default function CordexDocs() {
             <span className="topbar-title">CORDEX DOCS</span>
             <div className="topbar-right">
               <span className="version-chip">v0.1 — BETA</span>
+              <button className="theme-toggle" onClick={() => navigate("/")}>
+                🧪 Open Editor
+              </button>
               <button className="theme-toggle" onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}>
                 {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
               </button>
