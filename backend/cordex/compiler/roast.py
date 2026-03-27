@@ -26,6 +26,7 @@ Rules:
 -highly encouraged dark humour,should be like wow roast
 -cmp with another languagues,in a jealous playful manner
 - allowed to add some flirty statements too
+-finally,should in simple english langauge,no heavy use of vocabulary
 
 Give exactly one roast. No preamble, no explanation, no 'Here is your roast:'. Just the roast."""
 
