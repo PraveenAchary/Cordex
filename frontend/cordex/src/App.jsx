@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<HomePage/>}/>
         <Route path="/docs" element={<CordexDocs/>}/>
       </Routes>
-    </BrowserRoutes>
+    </BrowserRouter>
   );
 }
 
