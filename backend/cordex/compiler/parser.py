@@ -242,6 +242,7 @@ def parse_statement():
 
     elif token['type'] == 'IDENT':
         name = token['value']
+        advance()
         op = current()['type'] if current() else None
 
         if op=='PLUSPLUS':
