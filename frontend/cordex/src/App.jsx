@@ -10,7 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage/>}/>
+        <Route path="/" element={<Homepage/>}/>
         <Route path="/docs" element={<CordexDocs/>}/>
       </Routes>
     </BrowserRouter>
