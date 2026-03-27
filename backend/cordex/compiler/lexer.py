@@ -193,8 +193,21 @@ def tokenize(source):
             else:
                 tokens.append(make_token(TT_GT, '>'))
 
-        elif ch == '+': advance(); tokens.append(make_token(TT_PLUS,  '+'))
-        elif ch == '-': advance(); tokens.append(make_token(TT_MINUS, '-'))
+        elif ch == '+':
+            advance()
+            if current() == "+":
+                advance()
+                tokens.append(make_token("PLUSPLUS",  '++'))
+            else:
+                tokens.append(make_token(TT_PLUS,'+'))
+        elif ch == '-':
+            advance()
+            if current() == "-":
+                tokens.append(make_token("MINUSMINUS"))
+                advance();
+            else:
+                tokens.append(make_token(TT_MINUS, '-'))
+                
         elif ch == '*': advance(); tokens.append(make_token(TT_MUL,   '*'))
         elif ch == '/': advance(); tokens.append(make_token(TT_DIV,   '/'))
         elif ch == '(': advance(); tokens.append(make_token(TT_LPAREN))
