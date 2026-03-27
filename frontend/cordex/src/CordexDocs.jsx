@@ -594,7 +594,7 @@ export default function CordexDocs() {
 <span class="c-comment"># beating = while,  monitor = print</span>
 <span class="c-cardio">beating</span>(i <span class="c-op">&lt;</span> <span class="c-number">5)</span> {
     <span class="c-cardio">monitor</span>(i)
-    i <span class="c-op">=</span> i <span class="c-op">+</span> <span class="c-number">1</span>
+    i++;
 }
 
 <span class="c-comment"># diagnose = if,  rediagnose = else</span>
