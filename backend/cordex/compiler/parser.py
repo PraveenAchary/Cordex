@@ -152,27 +152,34 @@ def parse_statement():
         elif_clauses = []
         else_body    = None
 
-        while (current() and
-               current()['type'] == 'KEYWORD' and
-               current()['value'] == 'else'):
-            advance()                       # skip 'else'
-
-            if (current() and
-                current()['type'] == 'KEYWORD' and
-                current()['value'] == 'if'):
-                advance()                   # skip 'if'
-                advance()                   # skip '('
-                elif_cond = parse_expression()
-                advance()                   # skip ')'
-                advance()                   # skip '{'
-                elif_body = parse_body()
-                advance()                   # skip '}'
-                elif_clauses.append({'condition': elif_cond, 'body': elif_body})
-            else:
-                advance()                   # skip '{'
-                else_body = parse_body()
-                advance()                   # skip '}'
-                break
+        while (current() and current()['type'] == 'KEYWORD' and
+       current()['value'] in ('else', 'elif')):
+    
+                tok_val = current()['value']
+                advance()  # skip 'else' or 'elif'
+            
+                # 'elif' (ya_phir) is already a self-contained else-if token
+                # 'else' followed by 'if'/'agar' is also an else-if
+                is_elif = (tok_val == 'elif') or (
+                    current() and current()['type'] == 'KEYWORD' and
+                    current()['value'] in ('if', 'agar')
+                )
+            
+                if is_elif:
+                    if tok_val == 'else':
+                        advance()   # skip the 'if'/'agar' that follows
+                    advance()       # skip '('
+                    elif_cond = parse_expression()
+                    advance()       # skip ')'
+                    advance()       # skip '{'
+                    elif_body = parse_body()
+                    advance()       # skip '}'
+                    elif_clauses.append({'condition': elif_cond, 'body': elif_body})
+                else:
+                    advance()       # skip '{'
+                    else_body = parse_body()
+                    advance()       # skip '}'
+                    break
 
         return {
             'type':         'IfStatement',
