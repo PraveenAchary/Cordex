@@ -507,8 +507,8 @@ export default function Homepage() {
             </div>
           </div>
           <button
-            className="cx-validation-btn"
-            onclick={()=>{navigate("/docs")}
+            className="cx-validate-btn"
+            onClick={()=>{navigate("/docs")}}
             style = {{borderColor:"#6c63ff",color:"#a29bfe"}}
             >
             📘 Docs
