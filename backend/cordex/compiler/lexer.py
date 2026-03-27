@@ -195,16 +195,17 @@ def tokenize(source):
 
         elif ch == '+':
             advance()
-            if current() == "+":
-                advance()
-                tokens.append(make_token("PLUSPLUS",  '++'))
+            if current() == '+':
+                advance()   # ← consume second '+' BEFORE appending
+                tokens.append(make_token('PLUSPLUS', '++'))
             else:
-                tokens.append(make_token(TT_PLUS,'+'))
+                tokens.append(make_token(TT_PLUS, '+'))
+        
         elif ch == '-':
             advance()
-            if current() == "-":
-                tokens.append(make_token("MINUSMINUS"))
-                advance();
+            if current() == '-':
+                advance()   # ← consume second '-' BEFORE appending
+                tokens.append(make_token('MINUSMINUS', '--'))
             else:
                 tokens.append(make_token(TT_MINUS, '-'))
                 
