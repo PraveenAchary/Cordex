@@ -251,7 +251,7 @@ def parse_statement():
                 "name":name,
                 "value":{"type":"BinaryExpr","left":name,'op':'+',"right":1}
             }
-        elif op=='MINUSMINUS":
+        elif op=='MINUSMINUS':
             advance()
             return {
                 "type":"LetStatement",
