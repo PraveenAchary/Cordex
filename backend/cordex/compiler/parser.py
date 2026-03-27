@@ -152,8 +152,7 @@ def parse_statement():
         elif_clauses = []
         else_body    = None
 
-        while (current() and current()['type'] == 'KEYWORD' and
-       current()['value'] in ('else', 'elif')):
+        while (current() and current()['type'] == 'KEYWORD' and current()['value'] in ('else', 'elif')):
     
                 tok_val = current()['value']
                 advance()  # skip 'else' or 'elif'
