@@ -28,47 +28,46 @@ TT_SEMICOLON = 'SEMICOLON'
 TT_EOF       = 'EOF'
 
 # ── Keywords ─────────────────────────────────────────────
-# All keywords Cordex recognizes (old + new Desi-Indian style)
-
 KEYWORDS = {
-    # ── Original Standard Keywords ────────────────────────
+    # ── Standard Keywords ─────────────────────────────────
     'let', 'func',
     'if', 'else', 'while', 'for', 'in',
     'print',
     'true', 'false', 'null',
     'break', 'continue', 'return',
 
-    # ── Original Cardiology-Themed Keywords ───────────────
+    # ── Cardiology-Themed Keywords ────────────────────────
     'diagnose', 'rediagnose', 'bypass', 'pulse',
     'monitor', 'scan', 'beating', 'flatline',
 
-    # ── New Desi-Indian Style Keywords ────────────────────
-    'rakho',        # "keep/store"      → alias for let
-    'kaam',         # "work/function"   → alias for func
-    'agar',         # "if"              → alias for if
-    'warna',        # "otherwise"       → alias for else
-    'ya_phir',      # "or else if"      → alias for else if
-    'jab_tak',      # "as long as"      → alias for while
-    'baar_baar',    # "again and again" → alias for for
-    'bas',          # "enough/stop"     → alias for break
-    'aage_badh',    # "move forward"    → alias for continue
-    'wapas',        # "return/back"     → alias for return
-    'bol',          # "say/speak"       → alias for print
-    'sunao',        # "tell me"         → alternate print
-    'sach',         # "truth"           → alias for true
-    'jhooth',       # "lie"             → alias for false
-    'kuch_nahi',    # "nothing"         → alias for null
+    # ── Desi-Indian Style Keywords ────────────────────────
+    'rakho',        # "keep/store"      → let
+    'kaam',         # "work/function"   → func
+    'agar',         # "if"              → if
+    'warna',        # "otherwise"       → else
+    'ya_phir',      # "or else if"      → else if
+    'jab_tak',      # "as long as"      → while
+    'baar_baar',    # "again and again" → for
+    'bas',          # "enough/stop"     → break
+    'aage_badh',    # "move forward"    → continue
+    'wapas',        # "return/back"     → return
+    'bol',          # "say/speak"       → print
+    'sunao',        # "tell me"         → print
+    'sach',         # "truth"           → true
+    'jhooth',       # "lie"             → false
+    'kuch_nahi',    # "nothing"         → null
 }
 
-# ── Desi Keyword Alias Map ────────────────────────────────
-# Maps new Desi keywords → their standard equivalent
-# Used by the tokenizer to normalize keywords before parsing
+# ── Alias Map ─────────────────────────────────────────────
+# Maps all alias keywords → their standard equivalent
+# Used by the tokenizer to normalize before parsing
 DESI_ALIAS = {
+    # ── Desi-Indian Style ─────────────────────────────────
     'rakho'     : 'let',
     'kaam'      : 'func',
     'agar'      : 'if',
     'warna'     : 'else',
-    'ya_phir'   : 'else',   # treated as else; parser handles else+if
+    'ya_phir'   : 'else',      # parser handles else+if combo
     'jab_tak'   : 'while',
     'baar_baar' : 'for',
     'bas'       : 'break',
@@ -79,6 +78,16 @@ DESI_ALIAS = {
     'sach'      : 'true',
     'jhooth'    : 'false',
     'kuch_nahi' : 'null',
+
+    # ── Cardiology-Themed ─────────────────────────────────
+    'diagnose'   : 'if',       # initial condition check   → if
+    'rediagnose' : 'else',     # re-evaluate condition     → else
+    'bypass'     : 'continue', # skip / bypass logic       → continue
+    'pulse'      : 'true',     # alive / running check     → true
+    'monitor'    : 'print',    # watch / observe value     → print
+    'scan'       : 'for',      # inspect / iterate         → for
+    'beating'    : 'while',    # loop / alive condition    → while
+    'flatline'   : 'null',     # zero / dead / null state  → null
 }
 
 def make_token(type_, value=None):
@@ -146,7 +155,7 @@ def tokenize(source):
             while current() and (current().isalnum() or current() == '_'):
                 word += advance()
             if word in KEYWORDS:
-                # Normalize Desi alias → standard keyword for parser
+                # Normalize alias → standard keyword for parser
                 normalized = DESI_ALIAS.get(word, word)
                 tokens.append(make_token(TT_KEYWORD, normalized))
             else:
