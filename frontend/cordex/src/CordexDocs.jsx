@@ -66,12 +66,26 @@ const styles = `
     from { opacity: 0; transform: translateY(40px) scale(0.98); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
+  @keyframes slideInSidebar {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
 
   .docs-root {
     display: flex; min-height: 100vh;
     background: var(--bg); font-family: var(--font-body);
     transition: background 0.4s, color 0.4s;
   }
+
+  /* ── SIDEBAR OVERLAY (mobile) ── */
+  .sidebar-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 99;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  .sidebar-overlay.open { display: block; }
 
   .sidebar {
     width: var(--sidebar-w); min-height: 100vh;
@@ -80,6 +94,7 @@ const styles = `
     overflow-y: auto; z-index: 100;
     animation: fadeLeft 0.5s ease both;
     display: flex; flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   }
   .sidebar::-webkit-scrollbar { width: 4px; }
   .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -102,6 +117,19 @@ const styles = `
     background: var(--bg3); border-radius: 4px; padding: 2px 7px; letter-spacing: 1px;
   }
   .logo-tagline { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 4px; }
+
+  /* Close button inside sidebar (mobile only) */
+  .sidebar-close {
+    display: none;
+    position: absolute; top: 16px; right: 16px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; width: 32px; height: 32px;
+    align-items: center; justify-content: center;
+    font-size: 18px; cursor: pointer; color: var(--muted);
+    transition: color 0.2s, border-color 0.2s;
+    z-index: 101;
+  }
+  .sidebar-close:hover { color: var(--accent2); border-color: var(--accent2); }
 
   .sidebar-nav { padding: 16px 0; flex: 1; }
   .nav-group-label {
@@ -135,6 +163,17 @@ const styles = `
   .topbar-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--muted); letter-spacing: 1px; }
   .topbar-right { display: flex; align-items: center; gap: 12px; }
 
+  /* Hamburger button — hidden on desktop */
+  .hamburger {
+    display: none;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 10px; cursor: pointer;
+    font-size: 18px; color: var(--text); line-height: 1;
+    transition: border-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  .hamburger:hover { border-color: var(--accent); color: var(--accent); }
+
   .theme-toggle {
     display: flex; align-items: center; gap: 8px;
     background: var(--bg3); border: 1px solid var(--border);
@@ -147,6 +186,7 @@ const styles = `
     font-family: var(--font-mono); font-size: 11px; color: var(--accent);
     background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.25);
     border-radius: 12px; padding: 4px 10px; animation: pulse-glow 3s infinite;
+    white-space: nowrap;
   }
 
   .content { padding: 48px 56px 80px; max-width: 860px; }
@@ -277,12 +317,101 @@ const styles = `
   .main::-webkit-scrollbar { width: 6px; }
   .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
+  /* ═══════════════════════════════════════
+     MOBILE RESPONSIVE  (≤ 768px)
+  ═══════════════════════════════════════ */
   @media (max-width: 768px) {
-    .sidebar { transform: translateX(-100%); }
+
+    /* Sidebar: off-screen by default, slides in when .open */
+    .sidebar {
+      transform: translateX(-100%);
+      animation: none;
+      width: min(var(--sidebar-w), 80vw);
+      box-shadow: 4px 0 32px rgba(0,0,0,0.4);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+      animation: slideInSidebar 0.3s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .sidebar-close { display: flex; }
+
+    /* Main takes full width */
     .main { margin-left: 0; }
-    .content { padding: 24px 20px; }
-    .hero-title { font-size: 36px; }
-    .types-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Topbar */
+    .topbar { padding: 12px 16px; gap: 8px; }
+    .topbar-title { font-size: 12px; letter-spacing: 0.5px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hamburger { display: flex; align-items: center; justify-content: center; }
+    .version-chip { display: none; }
+
+    /* Action buttons — smaller on mobile */
+    .theme-toggle { padding: 5px 10px; font-size: 12px; gap: 5px; }
+
+    /* Content padding */
+    .content { padding: 24px 16px 60px; }
+
+    /* Hero banner */
+    .hero-banner { padding: 28px 20px; border-radius: 12px; }
+    .hero-title { font-size: 30px; }
+    .hero-subtitle { font-size: 14px; margin-bottom: 20px; }
+    .hero-chips { gap: 8px; }
+    .chip { font-size: 10px; padding: 4px 10px; }
+
+    /* Section titles */
+    .section-title { font-size: 24px; }
+    .section-desc { font-size: 14px; margin-bottom: 20px; }
+    .section { margin-bottom: 48px; }
+
+    /* Types grid: 2 columns on mobile */
+    .types-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .type-card { padding: 12px 14px; }
+    .type-name { font-size: 12px; }
+    .type-example { font-size: 10px; }
+
+    /* Keyword table — make it scrollable */
+    .kw-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; }
+    .kw-table { min-width: 480px; }
+    .kw-table th { padding: 8px 12px; font-size: 10px; }
+    .kw-table td { padding: 9px 12px; font-size: 12px; }
+    .kw-badge { font-size: 11px; padding: 2px 8px; }
+
+    /* Code blocks */
+    .code-body { font-size: 11px; padding: 14px 16px; line-height: 1.8; }
+    .code-header { padding: 8px 12px; }
+
+    /* Info cards */
+    .info-card { padding: 18px 16px; }
+    .info-card-title { font-size: 14px; }
+    .info-card p { font-size: 13px; }
+
+    /* Roast box */
+    .roast-box { padding: 22px 18px; }
+    .roast-box::after { font-size: 36px; right: 14px; top: 14px; }
+    .roast-title { font-size: 20px; }
+    .roast-example { font-size: 11px; padding: 10px 14px; }
+
+    /* Pipeline stages — wrap nicely */
+    .stages { gap: 8px; justify-content: center; }
+    .stage { min-width: 80px; padding: 10px 12px; }
+    .stage-icon { font-size: 18px; }
+    .stage-name { font-size: 10px; }
+    .stage-label { font-size: 10px; }
+    .stage-arrow { font-size: 14px; padding: 0 2px; }
+
+    /* Divider */
+    .divider { margin: 32px 0; }
+
+    /* Story footer */
+    .section:last-child > div:last-child { font-size: 12px; }
+  }
+
+  /* ── Very small phones (≤ 380px) ── */
+  @media (max-width: 380px) {
+    .hero-title { font-size: 24px; }
+    .section-title { font-size: 20px; }
+    .types-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .theme-toggle { padding: 5px 8px; font-size: 11px; }
+    .topbar-right { gap: 6px; }
   }
 `;
 
@@ -323,6 +452,7 @@ export default function CordexDocs() {
   const navigate = useNavigate();
   const [theme, setTheme] = useState("dark");
   const [active, setActive] = useState("intro");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const sectionRefs = useRef({});
 
   useEffect(() => {
@@ -334,7 +464,17 @@ export default function CordexDocs() {
     return () => observer.disconnect();
   }, []);
 
-  const scrollTo = (id) => sectionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Lock body scroll when mobile sidebar is open
+  useEffect(() => {
+    document.body.style.overflow = sidebarOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [sidebarOpen]);
+
+  const scrollTo = (id) => {
+    sectionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setSidebarOpen(false); // close sidebar on mobile after nav
+  };
+
   const groups = [...new Set(SECTIONS.map((s) => s.group))];
 
   return (
@@ -342,7 +482,16 @@ export default function CordexDocs() {
       <style>{styles}</style>
       <div className={`docs-root ${theme === "light" ? "light" : ""}`}>
 
-        <aside className="sidebar">
+        {/* Mobile overlay */}
+        <div
+          className={`sidebar-overlay ${sidebarOpen ? "open" : ""}`}
+          onClick={() => setSidebarOpen(false)}
+        />
+
+        <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+          {/* Mobile close button */}
+          <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>✕</button>
+
           <div className="sidebar-logo">
             <div className="logo-badge">
               <div className="logo-icon">🫀</div>
@@ -368,6 +517,10 @@ export default function CordexDocs() {
 
         <main className="main">
           <div className="topbar">
+            {/* Hamburger — only visible on mobile via CSS */}
+            <button className="hamburger" onClick={() => setSidebarOpen(true)} aria-label="Open navigation">
+              ☰
+            </button>
             <span className="topbar-title">CORDEX DOCS</span>
             <div className="topbar-right">
               <span className="version-chip">v0.1 — BETA</span>
@@ -473,33 +626,35 @@ export default function CordexDocs() {
               <SectionTag>Language</SectionTag>
               <div className="section-title">Standard <span>Keywords</span></div>
               <div className="section-desc">Classic English keywords — always available.</div>
-              <table className="kw-table">
-                <thead>
-                  <tr><th>Keyword</th><th>Type</th><th>Usage</th></tr>
-                </thead>
-                <tbody>
-                  {[
-                    ["let",      "Declaration",  "Declare a variable"],
-                    ["if",       "Control Flow", "Conditional branch"],
-                    ["else",     "Control Flow", "Alternate branch"],
-                    ["while",    "Control Flow", "Loop while condition is true"],
-                    ["for",      "Control Flow", "Iterate over a range / array"],
-                    ["in",       "Control Flow", "Used with for loops"],
-                    ["break",    "Loop Control", "Exit a loop"],
-                    ["continue", "Loop Control", "Skip to next iteration"],
-                    ["print",    "Output",       "Print to output"],
-                    ["true",     "Literal",      "Boolean true"],
-                    ["false",    "Literal",      "Boolean false"],
-                    ["null",     "Literal",      "Null / no value"],
-                  ].map(([kw, type, desc]) => (
-                    <tr key={kw}>
-                      <td><span className="kw-badge kw-std">{kw}</span></td>
-                      <td style={{color:"var(--muted)", fontSize:"12px"}}>{type}</td>
-                      <td style={{color:"var(--muted)", fontSize:"13px"}}>{desc}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="kw-table-wrap">
+                <table className="kw-table">
+                  <thead>
+                    <tr><th>Keyword</th><th>Type</th><th>Usage</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["let",      "Declaration",  "Declare a variable"],
+                      ["if",       "Control Flow", "Conditional branch"],
+                      ["else",     "Control Flow", "Alternate branch"],
+                      ["while",    "Control Flow", "Loop while condition is true"],
+                      ["for",      "Control Flow", "Iterate over a range / array"],
+                      ["in",       "Control Flow", "Used with for loops"],
+                      ["break",    "Loop Control", "Exit a loop"],
+                      ["continue", "Loop Control", "Skip to next iteration"],
+                      ["print",    "Output",       "Print to output"],
+                      ["true",     "Literal",      "Boolean true"],
+                      ["false",    "Literal",      "Boolean false"],
+                      ["null",     "Literal",      "Null / no value"],
+                    ].map(([kw, type, desc]) => (
+                      <tr key={kw}>
+                        <td><span className="kw-badge kw-std">{kw}</span></td>
+                        <td style={{color:"var(--muted)", fontSize:"12px"}}>{type}</td>
+                        <td style={{color:"var(--muted)", fontSize:"13px"}}>{desc}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </section>
 
             <div className="divider" />
@@ -512,34 +667,36 @@ export default function CordexDocs() {
                 Cordex speaks Hindi! Use these Desi-style keywords as 1:1 aliases for standard ones.
                 Mix and match — the compiler normalizes both automatically.
               </div>
-              <table className="kw-table">
-                <thead>
-                  <tr><th>Desi Keyword</th><th>Meaning</th><th>Standard Alias</th></tr>
-                </thead>
-                <tbody>
-                  {[
-                    ["rakho",     "keep / store",      "let"],
-                    ["agar",      "if",                "if"],
-                    ["warna",     "otherwise",         "else"],
-                    ["ya_phir",   "or else if",        "else if"],
-                    ["jab_tak",   "as long as",        "while"],
-                    ["baar_baar", "again and again",   "for"],
-                    ["bas",       "enough / stop",     "break"],
-                    ["aage_badh", "move forward",      "continue"],
-                    ["bol",       "say / speak",       "print"],
-                    ["sunao",     "tell me",           "print"],
-                    ["sach",      "truth",             "true"],
-                    ["jhooth",    "lie",               "false"],
-                    ["kuch_nahi", "nothing",           "null"],
-                  ].map(([kw, meaning, std]) => (
-                    <tr key={kw}>
-                      <td><span className="kw-badge kw-desi">{kw}</span></td>
-                      <td><span className="kw-meaning">"{meaning}"</span></td>
-                      <td><span className="kw-badge kw-std">{std}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="kw-table-wrap">
+                <table className="kw-table">
+                  <thead>
+                    <tr><th>Desi Keyword</th><th>Meaning</th><th>Standard Alias</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["rakho",     "keep / store",      "let"],
+                      ["agar",      "if",                "if"],
+                      ["warna",     "otherwise",         "else"],
+                      ["ya_phir",   "or else if",        "else if"],
+                      ["jab_tak",   "as long as",        "while"],
+                      ["baar_baar", "again and again",   "for"],
+                      ["bas",       "enough / stop",     "break"],
+                      ["aage_badh", "move forward",      "continue"],
+                      ["bol",       "say / speak",       "print"],
+                      ["sunao",     "tell me",           "print"],
+                      ["sach",      "truth",             "true"],
+                      ["jhooth",    "lie",               "false"],
+                      ["kuch_nahi", "nothing",           "null"],
+                    ].map(([kw, meaning, std]) => (
+                      <tr key={kw}>
+                        <td><span className="kw-badge kw-desi">{kw}</span></td>
+                        <td><span className="kw-meaning">"{meaning}"</span></td>
+                        <td><span className="kw-badge kw-std">{std}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <CodeBlock lang="cordex — desi style">
 {`<span class="c-desi">rakho</span> score <span class="c-op">=</span> <span class="c-number">95</span>
@@ -564,29 +721,31 @@ export default function CordexDocs() {
                 Cordex's heartbeat — medical-themed keywords fully implemented in the lexer,
                 normalized to their standard equivalents before parsing.
               </div>
-              <table className="kw-table">
-                <thead>
-                  <tr><th>Cardio Keyword</th><th>Cardio Meaning</th><th>Standard Alias</th></tr>
-                </thead>
-                <tbody>
-                  {[
-                    ["diagnose",   "Initial diagnosis",    "if"],
-                    ["rediagnose", "Re-examine",           "else"],
-                    ["bypass",     "Bypass surgery",       "continue"],
-                    ["pulse",      "Check pulse",          "true"],
-                    ["monitor",    "Patient monitor",      "print"],
-                    ["scan",       "Cardiac scan",         "for"],
-                    ["beating",    "Heart is beating",     "while"],
-                    ["flatline",   "Flatline / no signal", "null"],
-                  ].map(([kw, med, std]) => (
-                    <tr key={kw}>
-                      <td><span className="kw-badge kw-cardio">{kw}</span></td>
-                      <td><span className="kw-meaning">{med}</span></td>
-                      <td><span className="kw-badge kw-std">{std}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="kw-table-wrap">
+                <table className="kw-table">
+                  <thead>
+                    <tr><th>Cardio Keyword</th><th>Cardio Meaning</th><th>Standard Alias</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["diagnose",   "Initial diagnosis",    "if"],
+                      ["rediagnose", "Re-examine",           "else"],
+                      ["bypass",     "Bypass surgery",       "continue"],
+                      ["pulse",      "Check pulse",          "true"],
+                      ["monitor",    "Patient monitor",      "print"],
+                      ["scan",       "Cardiac scan",         "for"],
+                      ["beating",    "Heart is beating",     "while"],
+                      ["flatline",   "Flatline / no signal", "null"],
+                    ].map(([kw, med, std]) => (
+                      <tr key={kw}>
+                        <td><span className="kw-badge kw-cardio">{kw}</span></td>
+                        <td><span className="kw-meaning">{med}</span></td>
+                        <td><span className="kw-badge kw-std">{std}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <CodeBlock lang="cordex — cardio style">
 {`<span class="c-keyword">let</span> i <span class="c-op">=</span> <span class="c-number">0</span>
